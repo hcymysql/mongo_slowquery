@@ -7,7 +7,9 @@ agent客户端：慢日志采集分析工具，参考了Percona pt-mongodb-query
 
 执行
     php check_mongo_slowsql.php 
+
 相当于执行：
+
     db.getSiblingDB("samples").system.profile.find({millis:{$gte:2000}},    
     {millis:1,ns:1,query:1,ts:1,client:1,user:1}).sort({ts:-1}).limit(1000)
 
