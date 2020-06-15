@@ -6,6 +6,7 @@ agent客户端：慢日志采集分析工具，参考了Percona pt-mongodb-query
 每次抓取最近的1000条超过2秒的慢SQL记录入库。
 
 执行
+
     php check_mongo_slowsql.php 
 
 相当于执行：
