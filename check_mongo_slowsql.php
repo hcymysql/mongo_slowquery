@@ -149,7 +149,7 @@ function incr(){
 		} else {
 		    $insert_slowsql ="INSERT INTO  mongo_slow_query_review
 								  (checksum,querysql,ip,tag,dbname,port,ns,origin_user,client_ip,exec_time,last_time)
-								  VALUES('$checksum','$querysql','$ip','$tag','$dbname','$port','$ns','$origin_user','$client_ip','$exec_time','$last_time_cst')";			
+								  VALUES('$checksum','$querysql','$ip','$tag','$dbname','$port','$ns','$origin_user','$client_ip','$exec_time','$last_time_cst') ON DUPLICATE KEY UPDATE exec_time=$exec_time,last_time=$last_time,count=count+1";			
 		}
 	
 		//echo '$insert_slowsql: '. $insert_slowsql . "\n";
