@@ -31,7 +31,7 @@ db.getSiblingDB("samples").system.profile.find({millis:{$gte:2000}},{millis:1,ns
 
 	$is_data = "SELECT a.id AS checksum FROM mongo_slow_query_review a JOIN mongo_status_info b 
 					ON a.ip = b.ip AND a.dbname = b.dbname AND a.port = b.port
-					WHERE a.dbname='$dbname' order by a.id DESC LIMIT 1";
+					WHERE a.ip = '$ip' and a.tag='$tag' and a.dbname='$dbname' and a.port='$port' order by a.id DESC LIMIT 1";
 
 	$result = mysqli_query($con, $is_data);			
 	
@@ -43,7 +43,8 @@ db.getSiblingDB("samples").system.profile.find({millis:{$gte:2000}},{millis:1,ns
 		echo  '开始捕获增量慢SQL日志......'."\n";
 		incr();
 	}	
-
+	echo '----------------------------------------------------------'."\n";
+	echo '- END -'."\n";
 } //end while
 
 
@@ -53,7 +54,7 @@ function init(){
 	
 	foreach ($cursor as $doc) {
 	$querysql = json_encode($doc['query']);
-	$exec_time = $doc['millis'];
+	$exec_time = round($doc['millis']/1000,2); //单位转换为秒
 	$lt = get_object_vars($doc['ts']);
 	$last_time = $lt['sec'];
 	$ns = $doc['ns'];
@@ -83,7 +84,7 @@ function init(){
 		} else {
 		    $insert_slowsql ="INSERT INTO  mongo_slow_query_review
 								  (checksum,querysql,ip,tag,dbname,port,ns,origin_user,client_ip,exec_time,last_time)
-								  VALUES('$checksum','$querysql','$ip','$tag','$dbname','$port','$ns','$origin_user','$client_ip','$exec_time','$last_time_cst') ON DUPLICATE KEY UPDATE exec_time=$exec_time,last_time=$last_time,count=count+1";			
+								  VALUES('$checksum','$querysql','$ip','$tag','$dbname','$port','$ns','$origin_user','$client_ip','$exec_time','$last_time_cst') ON DUPLICATE KEY UPDATE exec_time=$exec_time,last_time='$last_time_cst',count=count+1";			
 		}
 	
 		//echo '$insert_slowsql: '. $insert_slowsql . "\n";
@@ -110,7 +111,7 @@ function incr(){
 	
 	foreach ($cursor as $doc) {
 	$querysql = json_encode($doc['query']);
-	$exec_time = $doc['millis'];
+	$exec_time = round($doc['millis']/1000,2); //单位转换为秒
 	$lt = get_object_vars($doc['ts']);
 	$last_time = $lt['sec'];
 	$ns = $doc['ns'];
@@ -140,8 +141,8 @@ function incr(){
 	if ($last_time > $d->sec) { //有新的慢SQL日志
 	//入库
 		$checksum = md5($querysql.$ns);
-		echo '$row[\'checksum\']: '. $row['checksum'] . "\n";
-		echo '$checksum: ' .$checksum  . "\n"; 
+		//echo '$row[\'checksum\']: '. $row['checksum'] . "\n";
+		//echo '$checksum: ' .$checksum  . "\n"; 
 		if ($row['checksum'] == $checksum){
 		    $insert_slowsql ="REPLACE INTO 	mongo_slow_query_review
 								  (checksum,querysql,ip,tag,dbname,port,ns,origin_user,client_ip,exec_time,last_time)
@@ -149,23 +150,23 @@ function incr(){
 		} else {
 		    $insert_slowsql ="INSERT INTO  mongo_slow_query_review
 								  (checksum,querysql,ip,tag,dbname,port,ns,origin_user,client_ip,exec_time,last_time)
-								  VALUES('$checksum','$querysql','$ip','$tag','$dbname','$port','$ns','$origin_user','$client_ip','$exec_time','$last_time_cst') ON DUPLICATE KEY UPDATE exec_time=$exec_time,last_time=$last_time,count=count+1";			
+								  VALUES('$checksum','$querysql','$ip','$tag','$dbname','$port','$ns','$origin_user','$client_ip','$exec_time','$last_time_cst') ON DUPLICATE KEY UPDATE exec_time=$exec_time,last_time='$last_time_cst',count=count+1";			
 		}
 	
 		//echo '$insert_slowsql: '. $insert_slowsql . "\n";
 								
 		if (mysqli_query($con, $insert_slowsql)) {
-				echo "{$ip}:'{$tag}'监控数据采集入库成功\n";
+				echo "{$ip}:{$tag}监控数据采集入库成功\n";
 				if ($row['checksum'] == $checksum){
 					$count = "UPDATE mongo_slow_query_review SET count=count+1 order by id desc limit 1";
 					mysqli_query($con,$count);
 				}
 				echo "---------------------------\n\n";
 		} else {
-				echo "{$ip}:'{$tag}'监控数据采集入库失败\n";
+				echo "{$ip}:{$tag}监控数据采集入库失败\n";
 				echo "Error: " . $insert_slowsql . "\n" . mysqli_error($con);
             }
-	}   else { echo '没有检测到有增量慢SQL'."\n"; }
+	}   else { echo "{$ip}:{$tag}没有检测到有增量慢SQL"."\n"; }
 
     }	// end foreach
 }
