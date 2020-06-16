@@ -90,14 +90,14 @@ function init(){
 		//echo '$insert_slowsql: '. $insert_slowsql . "\n";
 								
 		if (mysqli_query($con, $insert_slowsql)) {
-				echo "{$ip}:'{$tag}'监控数据采集入库成功\n";
+				echo "{$ip}:{$tag} 监控数据采集入库成功\n";
 				if ($row['checksum'] == $checksum){
 					$count = "UPDATE mongo_slow_query_review SET count=count+1 order by id desc limit 1";
 					mysqli_query($con,$count);
 				}
 				echo "---------------------------\n\n";
 		} else {
-				echo "{$ip}:'{$tag}'监控数据采集入库失败\n";
+				echo "{$ip}:{$tag}	监控数据采集入库失败\n";
 				echo "Error: " . $insert_slowsql . "\n" . mysqli_error($con);
             }
 	}   // end foreach
@@ -156,17 +156,17 @@ function incr(){
 		//echo '$insert_slowsql: '. $insert_slowsql . "\n";
 								
 		if (mysqli_query($con, $insert_slowsql)) {
-				echo "{$ip}:{$tag}监控数据采集入库成功\n";
+				echo "{$ip}:{$tag}	监控数据采集入库成功\n";
 				if ($row['checksum'] == $checksum){
 					$count = "UPDATE mongo_slow_query_review SET count=count+1 order by id desc limit 1";
 					mysqli_query($con,$count);
 				}
 				echo "---------------------------\n\n";
 		} else {
-				echo "{$ip}:{$tag}监控数据采集入库失败\n";
+				echo "{$ip}:{$tag}	监控数据采集入库失败\n";
 				echo "Error: " . $insert_slowsql . "\n" . mysqli_error($con);
             }
-	}   else { echo "{$ip}:{$tag}没有检测到有增量慢SQL"."\n"; }
+	}   else { echo "{$ip}:{$tag}	没有检测到有增量慢SQL"."\n"; }
 
     }	// end foreach
 }
