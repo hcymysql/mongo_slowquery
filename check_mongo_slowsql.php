@@ -21,7 +21,7 @@ while( list($ip,$tag,$user,$pwd,$port,$dbname) = mysqli_fetch_array($list))
 
 /*
 查询慢日志
-db.system.profile.find({millis:{$gte:2000}},{millis:1,ns:1,query:1,ts:1,client:1,user:1}).sort({ts:-1}).limit(1000)
+db.getSiblingDB("samples").system.profile.find({millis:{$gte:2000}},{millis:1,ns:1,query:1,ts:1,client:1,user:1}).sort({ts:-1}).limit(1000)
 */
 
 	$where=array("millis" => array('$gte' => 2000));
