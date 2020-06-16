@@ -26,7 +26,7 @@ db.getSiblingDB("samples").system.profile.find({millis:{$gte:2000}},{millis:1,ns
 
 	$where=array("millis" => array('$gte' => 2000));
 	$fields=array("millis" => 1,"ns" => 1,"query" => 1,"ts" => 1, "client" => 1, "user" => 1);
-	$cursor = $collection->find($where,$fields)->limit(10);
+	$cursor = $collection->find($where,$fields)->limit(1000);
 	$cursor = $cursor->sort(array("ts" => -1));
 
 	$is_data = "SELECT a.id AS checksum FROM mongo_slow_query_review a JOIN mongo_status_info b 
@@ -63,7 +63,7 @@ function init(){
 	$ltd = new MongoDate($last_time);
 	$last_time_cst = $ltd->toDateTime()->format('Y-m-d H:i:s');
 
-	print_r($doc); //打开调试
+	//print_r($doc); //打开调试
 	
 	$sql = "SELECT a.last_time AS last_time, a.checksum AS checksum FROM mongo_slow_query_review a JOIN mongo_status_info b 
     ON a.ip = b.ip AND a.dbname = b.dbname AND a.port = b.port
@@ -74,8 +74,8 @@ function init(){
 		
 	//入库
 		$checksum = md5($querysql.$ns);
-		echo '$row[\'checksum\']: '. $row['checksum'] . "\n";
-		echo '$checksum: ' .$checksum  . "\n"; 
+		//echo '$row[\'checksum\']: '. $row['checksum'] . "\n";
+		//echo '$checksum: ' .$checksum  . "\n"; 
 		if ($row['checksum'] == $checksum){
 		    $insert_slowsql ="REPLACE INTO 	mongo_slow_query_review
 								  (checksum,querysql,ip,tag,dbname,port,ns,origin_user,client_ip,exec_time,last_time)
@@ -83,7 +83,7 @@ function init(){
 		} else {
 		    $insert_slowsql ="INSERT INTO  mongo_slow_query_review
 								  (checksum,querysql,ip,tag,dbname,port,ns,origin_user,client_ip,exec_time,last_time)
-								  VALUES('$checksum','$querysql','$ip','$tag','$dbname','$port','$ns','$origin_user','$client_ip','$exec_time','$last_time_cst')";			
+								  VALUES('$checksum','$querysql','$ip','$tag','$dbname','$port','$ns','$origin_user','$client_ip','$exec_time','$last_time_cst') ON DUPLICATE KEY UPDATE exec_time=$exec_time,last_time=$last_time,count=count+1";			
 		}
 	
 		//echo '$insert_slowsql: '. $insert_slowsql . "\n";
@@ -120,7 +120,7 @@ function incr(){
 	$ltd = new MongoDate($last_time);
 	$last_time_cst = $ltd->toDateTime()->format('Y-m-d H:i:s');
 
-	print_r($doc); //打开调试
+	//print_r($doc); //打开调试
 	
 	$sql = "SELECT a.last_time AS last_time, a.checksum AS checksum FROM mongo_slow_query_review a JOIN mongo_status_info b 
     ON a.ip = b.ip AND a.dbname = b.dbname AND a.port = b.port
