@@ -21,6 +21,9 @@ a:hover { text-decoration:underline;color: #6600FF}
 a:visited { text-decoration: none;color: green}
 </style>
 
+    <script type="text/javascript" src="xadmin/js/jquery-3.3.1.min.js"></script>
+    <script src="xadmin/lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="xadmin/js/xadmin.js"></script>
     <link rel="stylesheet" href="./css/simple-line-icons/css/simple-line-icons.css">
     <link rel="stylesheet" href="./css/font-awesome/css/fontawesome-all.min.css">
     <link rel="stylesheet" href="./css/styles.css">
@@ -156,8 +159,9 @@ return true;
     while($row = mysqli_fetch_array($result)) 
     {
     	echo "<tr>";
-	echo "<td width='100px' onclick=\"TestBlack('${row['0']}')\">✚  &nbsp;" .substr("{$row['1']}",0,50)  
-     ."<div id='${row['0']}' style='display:none;'><a href='slowquery_explain.php?checksum={$row['0']}'>" .$row['1'] ."</br></div></a></td>";
+			
+echo "<td width='100px' onclick=\"TestBlack('${row['0']}')\">✚  &nbsp;" .substr("{$row['1']}",0,50)  ."<div id='${row['0']}' style='display:none;'><a href='javascript:void(0);'onclick=\"x_admin_show('慢SQL详细信息','slowquery_explain.php?checksum={$row['0']}') \">" .$row['1'] ."</br></div></a></td>";
+	
 	echo "<td>{$row['2']}</td>";
 	echo "<td>{$row['3']}</td>";
 	echo "<td>{$row['5']}</td>";
