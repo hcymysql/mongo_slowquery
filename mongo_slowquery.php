@@ -138,7 +138,7 @@ return true;
 	$sql =  "SELECT a.checksum,a.querysql,a.ip,a.tag,a.dbname,a.port,a.ns,a.origin_user,a.client_ip,a.exec_time,a.last_time,a.count 
 		        FROM mongo_slow_query_review a JOIN mongo_status_info b 
                 ON a.ip = b.ip AND a.dbname = b.dbname AND a.port = b.port
-				WHERE a.tag = '${select_tag}' AND a.querysql <> '[]' AND a.`querysql` <> 'null'
+				WHERE a.tag = '${select_tag}' AND a.querysql <> '[]' AND a.querysql <> 'null'
 				AND a.last_time >= SUBDATE(NOW(),INTERVAL 14 DAY)
                 ORDER BY a.last_time DESC,a.count DESC
 				LIMIT $startCount,$perNumber";
@@ -147,7 +147,7 @@ return true;
 		FROM mongo_slow_query_review a JOIN mongo_status_info b 
                 ON a.ip = b.ip AND a.dbname = b.dbname AND a.port = b.port
                 WHERE a.last_time >= SUBDATE(NOW(),INTERVAL 14 DAY)
- 		AND a.querysql <> '[]' AND a.`querysql` <> 'null'
+				AND a.querysql <> '[]' AND a.querysql <> 'null'
                 ORDER BY a.last_time DESC,a.count DESC
                 LIMIT $startCount,$perNumber";
     }
