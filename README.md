@@ -1,4 +1,4 @@
-# MongoDB Slowquery平台可视化慢查询工具（开发中）
+# MongoDB Slowquery慢查询日志分析平台（开发中）
 
 agent客户端：check_mongo_slowsql.php——慢日志采集分析工具，参考了Percona pt-mongodb-query-digest展示思路，并用PHP重写定制化，将结果插入MySQL表里，用前端页面展现出来，方便开发定位问题。
 
