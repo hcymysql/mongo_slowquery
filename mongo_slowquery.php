@@ -7,7 +7,7 @@
     }     
 ?>
 
-<html>
+<html class="x-admin-sm">
 <head>
     <meta http-equiv="Content-Type"  content="text/html;  charset=UTF-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -24,6 +24,7 @@ a:visited { text-decoration: none;color: green}
     <script type="text/javascript" src="xadmin/js/jquery-3.3.1.min.js"></script>
     <script src="xadmin/lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="xadmin/js/xadmin.js"></script>
+    <link rel="stylesheet" href="./css/bootstrap.min.css"> 
     <link rel="stylesheet" href="./css/simple-line-icons/css/simple-line-icons.css">
     <link rel="stylesheet" href="./css/font-awesome/css/fontawesome-all.min.css">
     <link rel="stylesheet" href="./css/styles.css">
@@ -39,6 +40,7 @@ function TestBlack(TagName){
 }
 </script>
 
+
 <script>
 function ss(){
 var slt=document.getElementById("select");
@@ -49,14 +51,17 @@ if(slt.value==""){
 return true;
 }
 </script>
+
+
 </head>
 
-<body>
+<body style="overflow-y:scroll">
 <div class="card">
 <div class="card-header bg-light">
-    <h1><a href="mongo_slowquery.php?action=logout">MongoDB 慢查询分析</a></h1>
+    <h1><a href="mongo_slowquery.php?action=logout">
+    <img src='./images/mongodb-logo.png'/> 慢查询日志分析平台</a></h1>
 </div>
-      
+
 <div class="card-body">
 <div class="table-responsive">                  
 <form action="" method="post" name="sql_statement" id="form1" onsubmit=" return ss()">
@@ -89,19 +94,19 @@ return true;
         $tag=$_POST['tag'];
         session_start();
 	$_SESSION['transmit_tag']=$tag;
-        //require 'show.html';
+        require 'show.html';
     } else {
 		session_start();
 	    $tag=$_SESSION['transmit_tag'];
 		if(!empty($tag)){
-			//require 'show.html';
+			require 'show.html';
 		} else {
-			//require 'top.html';
+			require 'top.html';
 		}
     }
 ?>
 
-<table class="table table-hover">                                    
+<table style='width:100%;font-size:14px;' class='table table-hover table-condensed'>
 <thead>                                   
 <tr>                                    
 <th>抽象语句</th>                                        
@@ -138,16 +143,16 @@ return true;
 	$sql =  "SELECT a.checksum,a.querysql,a.ip,a.tag,a.dbname,a.port,a.ns,a.origin_user,a.client_ip,a.exec_time,a.last_time,a.count 
 		        FROM mongo_slow_query_review a JOIN mongo_status_info b 
                 ON a.ip = b.ip AND a.dbname = b.dbname AND a.port = b.port
-				WHERE a.tag = '${select_tag}' AND a.querysql <> '[]' AND a.querysql <> 'null'
-				AND a.last_time >= SUBDATE(NOW(),INTERVAL 14 DAY)
+				WHERE a.tag = '${select_tag}' AND a.querysql <> '[]' AND a.`querysql` <> 'null'
+				AND a.last_time >= SUBDATE(NOW(),INTERVAL 31 DAY)
                 ORDER BY a.last_time DESC,a.count DESC
 				LIMIT $startCount,$perNumber";
     } else {
         $sql = "SELECT a.checksum,a.querysql,a.ip,a.tag,a.dbname,a.port,a.ns,a.origin_user,a.client_ip,a.exec_time,a.last_time,a.count 
 		FROM mongo_slow_query_review a JOIN mongo_status_info b 
                 ON a.ip = b.ip AND a.dbname = b.dbname AND a.port = b.port
-                WHERE a.last_time >= SUBDATE(NOW(),INTERVAL 14 DAY)
-				AND a.querysql <> '[]' AND a.querysql <> 'null'
+                WHERE a.last_time >= SUBDATE(NOW(),INTERVAL 31 DAY)
+ 		AND a.querysql <> '[]' AND a.`querysql` <> 'null'
                 ORDER BY a.last_time DESC,a.count DESC
                 LIMIT $startCount,$perNumber";
     }
@@ -159,9 +164,8 @@ return true;
     while($row = mysqli_fetch_array($result)) 
     {
     	echo "<tr>";
-			
-echo "<td width='100px' onclick=\"TestBlack('${row['0']}')\">✚  &nbsp;" .substr("{$row['1']}",0,50)  ."<div id='${row['0']}' style='display:none;'><a href='javascript:void(0);'onclick=\"x_admin_show('慢SQL详细信息','slowquery_explain.php?checksum={$row['0']}') \">" .$row['1'] ."</br></div></a></td>";
-	
+        echo "<td width='100px' onclick=\"TestBlack('${row['0']}')\">✚  &nbsp;" .substr("{$row['1']}",0,50)
+    ."<div id='${row['0']}' style='display:none;'><a href='slowquery_explain.php?checksum={$row['0']}'>" .$row['1'] ."</br></div></a></td>";
 	echo "<td>{$row['2']}</td>";
 	echo "<td>{$row['3']}</td>";
 	echo "<td>{$row['5']}</td>";
