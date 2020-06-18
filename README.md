@@ -18,3 +18,7 @@
 
 
 采用远程连接方式获取慢SQL，所以无需要在数据库服务器端部署相关agent或计划任务。
+
+![image](https://raw.githubusercontent.com/hcymysql/mongo_slowquery/master/images/1.png)
+![image](https://raw.githubusercontent.com/hcymysql/mongo_slowquery/master/images/2.png)
+![image](https://raw.githubusercontent.com/hcymysql/mongo_slowquery/master/images/3.png)
