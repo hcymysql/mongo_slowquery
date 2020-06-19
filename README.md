@@ -28,3 +28,6 @@
 点击《选择数据库标签》可以查看具体的业务库慢SQL趋势走向。
 
 ![image](https://raw.githubusercontent.com/hcymysql/mongo_slowquery/master/images/3.png)
+
+点击抽象语句栏目的✚号，会弹出一个新连接，展示慢SQL的来源用户名，IP，集合的大小，集合的索引信息，以及SQL的Explain执行计划。
+
