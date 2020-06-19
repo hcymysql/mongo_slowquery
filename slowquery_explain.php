@@ -5,14 +5,18 @@ require 'conn.php';
 $checksum=$_GET['checksum'];
 
 $get_info= "SELECT a.querysql as querysql,a.dbname as dbname,b.ip as ip,b.user as user,b.pwd as pwd,b.port as port,
-		         a.origin_user as origin_user,a.client_ip as client_ip
-                 FROM mongo_slow_query_review a JOIN mongo_status_info b 
-                 ON a.ip = b.ip AND a.dbname = b.dbname AND a.port = b.port
-                 WHERE a.checksum  = '$checksum'";
- 
+				  a.ns as ns,a.origin_user as origin_user,a.client_ip as client_ip
+                  FROM mongo_slow_query_review a JOIN mongo_status_info b 
+                  ON a.ip = b.ip AND a.dbname = b.dbname AND a.port = b.port
+                  WHERE a.checksum  = '$checksum'";
+
 $result = mysqli_query($con,$get_info);
 
-list($querysql,$dbname,$ip,$user,$pwd,$port,$origin_user,$client_ip) = mysqli_fetch_array($result);
+
+list($querysql,$dbname,$ip,$user,$pwd,$port,$ns,$origin_user,$client_ip) = mysqli_fetch_array($result);
+
+$ns_collection = explode(".",$ns);
+$collection = $ns_collection[1];
 
 ?>
 
@@ -40,16 +44,8 @@ list($querysql,$dbname,$ip,$user,$pwd,$port,$origin_user,$client_ip) = mysqli_fe
     </div>
 
     <div class="card-header bg-light">
-        执行的SQL是：<b><?php echo $querysql."<br>"; ?></b>
+        执行的SQL：<b><?php echo $querysql."<br>"; ?></b>
     </div>
-
-    <div class="card-header bg-light">
-        Explain执行计划是：
-    </div>
-
-<div class="card-body">
-<div class="table-responsive">
-<table class="table table-hover">
 
 <?php
 
@@ -62,13 +58,43 @@ list($querysql,$dbname,$ip,$user,$pwd,$port,$origin_user,$client_ip) = mysqli_fe
 		echo '连接报错，错误信息是： ' .$e->getMessage()."\n";
 	}
 
+?>	
+	
+	<div class="card-header bg-light">
+        <?php  echo '集合'.$collection.'索引信息：'."<br>";?>
+	</div>	
+	
+		<div class="card-body">
+		<div class="table-responsive">
+		<table class="table table-hover">
+		<?php
+			$getindex=$db->command(array('listIndexes' => 'AuditResult' ) );
+			echo "<pre>";
+			print_r($getindex);
+			echo "</pre>";
+		?>	
+		</table>
+		</div>
+		</div>
+
+	
+    <div class="card-header bg-light">
+        Explain执行计划：
+    </div>
+
+<div class="card-body">
+<div class="table-responsive">
+<table class="table table-hover">
+
+<?php
+
 $json=json_decode($querysql, true);
 $explain = $db->command(array('explain' => $json ,'verbosity'=>'queryPlanner') );
 echo "<pre>";
 print_r($explain);
 echo "</pre>";
 
-echo '<br><h3><a href="javascript:history.back(-1);">点击此处返回</a></h3></br>';
+//echo '<br><h3><a href="javascript:history.back(-1);">点击此处返回</a></h3></br>';
 
 ?>
 
