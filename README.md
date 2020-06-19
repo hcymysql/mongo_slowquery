@@ -19,6 +19,8 @@
 
 采用远程连接方式获取慢SQL，所以无需要在数据库服务器端部署相关agent或计划任务。
 
+注：监控环境为MongoDB 3.2以上版本，2.X版本未测试。
+
 ![image](https://raw.githubusercontent.com/hcymysql/mongo_slowquery/master/images/1.png)
 
 首页汇总了生产业务库31天内的慢SQL集合。
