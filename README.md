@@ -1,4 +1,4 @@
-# MongoDB Slowquery慢查询日志分析平台（开发中）
+# MongoDB Slowquery慢查询日志分析平台
 
 # 简介
    MongoDB的慢SQL日志是记录到业务库的system.profile表里，当线上DB运行缓慢时，开发通常联系DBA去排查问题，那么可以将这种机械化的工作，做成一个平台化、可视化的工具出来，让开发在网页里点点鼠标即可查看数据库运行状况，这将大大提高工作效率，降低对DBA的依赖。
@@ -31,3 +31,31 @@
 
 点击抽象语句栏目的✚号，会弹出一个新连接，展示慢SQL的来源用户名，IP，集合的大小，集合的索引信息，以及SQL的Explain执行计划。
 
+# 一、环境搭建
+
+1、php-mysql驱动安装
+
+shell> yum install -y php-pear php-devel php gcc openssl openssl-devel cyrus-sasl cyrus-sasl-devel httpd mysql php-mysql
+
+2、php-mongo驱动安装：
+
+shell> pecl install mongo
+
+把extension=mongo.so加入到/etc/php.ini最后一行。
+
+重启httpd服务，service httpd restart
+
+（注：如果通过pecl安装报错，请参考以下链接，进行源码安装。PHP 5.4版本对应的驱动版本是mongodb-1.3.4.tgz
+
+https://www.runoob.com/mongodb/mongodb-install-php-driver.html ）
+
+
+3、创建mongodb管理员用户权限（监控采集数据时使用）
+
+首先我们在被监控的数据库端创建授权帐号，允许采集器服务器能连接到Mongodb数据库。由于需要执行命令db.runCommand()，所以需要授予管理员角色，授权方式如下所示：
+
+    > use yourdb
+    > db.createUser({user:"monitor_slowsql",pwd:"123456",roles:[{role:"dbOwner",db:"yourdb"}]})
+    
+ 
+# 二、mongo_slowquery部署
