@@ -58,4 +58,55 @@ https://www.runoob.com/mongodb/mongodb-install-php-driver.html ）
     > db.createUser({user:"monitor_slowsql",pwd:"123456",roles:[{role:"dbOwner",db:"yourdb"}]})
     
  
-# 二、mongo_slowquery部署
+# 二、MongoDB Slowquery部署
+
+把https://github.com/hcymysql/mongo_slowquery/archive/master.zip安装包解压缩到 /var/www/html/目录下
+
+1、导入MongoDB Slowquery慢查询监控工具表结构（mongo_slowsql库）
+
+cd /var/www/html/mongo_monitor/
+
+    mysql -uroot -p123456 < mongo_slowsql_schema.sql
+
+2、录入被监控主机的信息
+
+    INSERT INTO mongo_status_info(ip,tag,user,pwd,port,dbname,threshold_slow_ms)
+    VALUES('10.10.159.31','MongoDB测试机1','monitor_slowsql','123456','27017','yourdb',1000);
+
+注，以下字段可以按照需求变更：
+
+ip字段含义：输入被监控Mongo的IP地址
+
+tag字段含义：输入被监控Mongo的业务名字
+
+user字段含义：输入被监控Mongo的用户名（ROOT权限）
+
+pwd字段含义：输入被监控Mongo的密码
+
+port字段含义：输入被监控MySQL的端口号
+
+dbname字段含义：输入被监控Mongo的数据库登录权限认证库名
+
+threshold_slow_ms字段含义：输入慢查询的阈值，当查询时间超过设定的阈值时，该SQL语句会被agent端抓取到平台里，单位毫秒
+
+3、修改conn.php配置文件
+
+# vim /var/www/html/mongo_monitor/conn.php
+
+$con = mysqli_connect("127.0.0.1","admin","123456","mongo_monitor","3306") or die("数据库链接错误".mysql_error());
+
+改成你的MongoDB Slowquery慢查询监控工具表结构（mongo_slowsql库）连接信息
+
+4、Agent定时任务每10分钟抓取一次慢日志
+
+# crontab -l
+   */10 * * * * cd /var/www/html/mongo_slowquery; /usr/bin/php /var/www/html/mongo_slowquery/check_mongo_slowsql.php  > /dev/null 2 >&1
+   
+5、页面访问
+
+http://yourIP/mongo_slowquery/mongo_slowquery.php
+
+加一个超链接，可方便地接入你们的自动化运维平台里。   
+
+
+
