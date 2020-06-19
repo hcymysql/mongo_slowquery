@@ -23,10 +23,7 @@ while( list($ip,$tag,$user,$pwd,$port,$dbname,$threshold_slow_ms) = mysqli_fetch
 查询慢日志
 db.getSiblingDB("samples").system.profile.find({millis:{$gte:1000}},{millis:1,ns:1,query:1,ts:1,client:1,user:1}).sort({ts:-1}).limit(1000)
 */
-//echo '$threshold_slow_ms: '.$threshold_slow_ms."\n";
 	$where=array("millis" => array('$gte' => (int)$threshold_slow_ms ));
-	var_dump($where);
-	//$where=array("millis" => array('$gte' => 1000));
 	$fields=array("millis" => 1,"ns" => 1,"query" => 1,"ts" => 1, "client" => 1, "user" => 1);
 	$cursor = $collection->find($where,$fields)->limit(1000);
 	$cursor = $cursor->sort(array("ts" => -1));
