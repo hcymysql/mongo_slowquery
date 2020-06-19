@@ -36,15 +36,15 @@ $collection = $ns_collection[1];
 <div class="card">
 
     <div class="card-header bg-light">
-        来源用户：<b><?php echo $origin_user."<br>"; ?></b>
+        <font size="5" face="arial" color="blue">来源用户：</font><b><?php echo $origin_user."<br>"; ?></b>
     </div>
 
     <div class="card-header bg-light">
-        应用端IP：<b><?php echo $client_ip."<br>"; ?></b>
+        <font size="5" face="arial" color="blue">应用端IP：</font><b><?php echo $client_ip."<br>"; ?></b>
     </div>
 
     <div class="card-header bg-light">
-        执行的SQL：<b><?php echo $querysql."<br>"; ?></b>
+        <font size="5" face="arial" color="blue">执行的SQL：</font><b><?php echo $querysql."<br>"; ?></b>
     </div>
 
 <?php
@@ -61,7 +61,9 @@ $collection = $ns_collection[1];
 ?>	
 	
 	<div class="card-header bg-light">
+	<font size="5" face="arial" color="blue">
         <?php  echo '集合'.$collection.'索引信息：'."<br>";?>
+	</font>
 	</div>	
 	
 		<div class="card-body">
@@ -79,7 +81,7 @@ $collection = $ns_collection[1];
 
 	
     <div class="card-header bg-light">
-        Explain执行计划：
+        <font size="5" face="arial" color="blue">Explain执行计划：</font>
     </div>
 
 <div class="card-body">
@@ -97,6 +99,8 @@ echo "</pre>";
 //echo '<br><h3><a href="javascript:history.back(-1);">点击此处返回</a></h3></br>';
 
 ?>
+
+<h3>- END-</h3>
 
 </table>
 </div>
