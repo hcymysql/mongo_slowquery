@@ -124,7 +124,7 @@ function incr(){
 	
 	$sql = "SELECT a.last_time AS last_time, a.checksum AS checksum FROM mongo_slow_query_review a JOIN mongo_status_info b 
     ON a.ip = b.ip AND a.dbname = b.dbname AND a.port = b.port
-    WHERE a.dbname='holmes_index' order by a.last_time DESC LIMIT 1";
+    WHERE a.dbname='$dbname' order by a.last_time DESC LIMIT 1";
 	
 	$result = mysqli_query($con,$sql);
 	$row = mysqli_fetch_assoc($result);
