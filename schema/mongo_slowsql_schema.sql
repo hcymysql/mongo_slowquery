@@ -2,7 +2,8 @@
 SQLyog Ultimate v12.09 (64 bit)
 MySQL - 10.1.10-MariaDB-enterprise-log : Database - mongo_slowsql
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -47,6 +48,7 @@ CREATE TABLE `mongo_status_info` (
   `pwd` varchar(100) DEFAULT NULL COMMENT '输入被监控Mongo的密码',
   `port` int(11) DEFAULT NULL COMMENT '输入被监控Mongo的端口号',
   `dbname` varchar(100) DEFAULT NULL COMMENT '输入被监控Mongo的数据库名',
+  `threshold_slow_ms` int(11) DEFAULT NULL COMMENT '输入慢查询的阈值，当查询时间超过设定的阈值时，该SQL语句会被agent端抓取到平台里，单位毫秒',
   PRIMARY KEY (`id`),
   KEY `IX_tag` (`tag`),
   KEY `IX_i_d_p` (`ip`,`port`,`dbname`)
