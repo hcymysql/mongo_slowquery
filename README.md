@@ -5,7 +5,7 @@
     
    参考了Percona pt-mongodb-query-digest工具抓取分析的展示思路，并用PHP重构，将分析结果插入MySQL表里，用前端页面展现出来，方便开发定位问题。
 
-每次抓取最近的1000条超过2秒的慢SQL记录入库。
+每次抓取最近的1000条超过1秒的慢SQL记录入库。
 
 执行
 
@@ -20,5 +20,11 @@
 采用远程连接方式获取慢SQL，所以无需要在数据库服务器端部署相关agent或计划任务。
 
 ![image](https://raw.githubusercontent.com/hcymysql/mongo_slowquery/master/images/1.png)
+
+首页汇总了生产业务库31天内的慢SQL集合。
+
 ![image](https://raw.githubusercontent.com/hcymysql/mongo_slowquery/master/images/2.png)
+
+点击《选择数据库标签》可以查看具体的业务库慢SQL趋势走向。
+
 ![image](https://raw.githubusercontent.com/hcymysql/mongo_slowquery/master/images/3.png)
