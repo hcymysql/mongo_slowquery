@@ -113,7 +113,7 @@ echo "</pre>";
 
 ?>
 
-<h3>- END-</h3>
+<h3>- END -</h3>
 
 </table>
 </div>
