@@ -108,5 +108,10 @@ http://yourIP/mongo_slowquery/mongo_slowquery.php
 
 加一个超链接，可方便地接入你们的自动化运维平台里。   
 
+6、MongoDB开启慢查询
+     
+     db.setProfilingLevel(1,1000); 
 
-
+查看是否开启慢查询
+    
+    db.getProfilingStatus()
