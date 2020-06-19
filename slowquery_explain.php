@@ -60,6 +60,19 @@ $collection = $ns_collection[1];
 
 ?>	
 	
+        <div class="card-header bg-light">
+        <font size="5" face="arial" color="blue">	
+<?php
+
+	$coll_info= $db->command(array('collStats' => $collection) );
+	echo '集合'.$collection.' 行数count统计是：'.$coll_info['count']."<br>";
+	echo '集合'.$collection.' 表大小Size统计是：'.round($coll_info['size']/(1024*1024*1024),2)."GB"."<br>";
+	echo '集合'.$collection.' 索引大小Index Size统计是：'.round($coll_info['totalIndexSize']/(1024*1024*1024),2)."GB"."<br>";
+
+	?>
+        </font>
+        </div>
+
 	<div class="card-header bg-light">
 	<font size="5" face="arial" color="blue">
         <?php  echo '集合'.$collection.'索引信息：'."<br>";?>
@@ -70,7 +83,7 @@ $collection = $ns_collection[1];
 		<div class="table-responsive">
 		<table class="table table-hover">
 		<?php
-			$getindex=$db->command(array('listIndexes' => 'AuditResult' ) );
+			$getindex=$db->command(array('listIndexes' => $collection ) );
 			echo "<pre>";
 			print_r($getindex);
 			echo "</pre>";
