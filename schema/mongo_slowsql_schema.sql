@@ -21,6 +21,7 @@ USE `mongo_slowsql`;
 CREATE TABLE `mongo_slow_query_review` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键自增ID',
   `checksum` varchar(100) DEFAULT NULL COMMENT 'md5校验值',
+  `fingerprint` text COMMENT '抽象语句',
   `querysql` text COMMENT '查询语句',
   `ip` varchar(50) DEFAULT NULL COMMENT '主机IP',
   `tag` varchar(100) DEFAULT NULL COMMENT '主机标签',
