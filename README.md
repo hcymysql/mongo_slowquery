@@ -66,11 +66,11 @@ https://www.runoob.com/mongodb/mongodb-install-php-driver.html ）
 
 1、导入MongoDB Slowquery慢查询监控工具表结构（mongo_slowsql库）
 
-cd /var/www/html/mongo_slowquery/
+cd /var/www/html/mongo_slowquery/schema/
 
     mysql -uroot -p123456 < mongo_slowsql_schema.sql
 
-2、录入被监控主机的信息
+2、录入被监控Mongo主机的信息
 
     INSERT INTO mongo_status_info(ip,tag,user,pwd,port,dbname,threshold_slow_ms)
     VALUES('10.10.159.31','MongoDB测试机1','monitor_slowsql','123456','27017','yourdb',1000);
@@ -81,7 +81,7 @@ ip字段含义：输入被监控Mongo的IP地址
 
 tag字段含义：输入被监控Mongo的业务名字
 
-user字段含义：输入被监控Mongo的用户名（ROOT权限）
+user字段含义：输入被监控Mongo的用户名（dbOwner管理员角色）
 
 pwd字段含义：输入被监控Mongo的密码
 
