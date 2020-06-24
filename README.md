@@ -66,7 +66,7 @@ https://www.runoob.com/mongodb/mongodb-install-php-driver.html ）
 
 1、导入MongoDB Slowquery慢查询监控工具表结构（mongo_slowsql库）
 
-cd /var/www/html/mongo_monitor/
+cd /var/www/html/mongo_slowquery/
 
     mysql -uroot -p123456 < mongo_slowsql_schema.sql
 
@@ -93,9 +93,9 @@ threshold_slow_ms字段含义：输入慢查询的阈值，当查询时间超过
 
 3、修改conn.php配置文件
 
-# vim /var/www/html/mongo_monitor/conn.php
+# vim /var/www/html/mongo_slowquery/conn.php
 
-      $con = mysqli_connect("127.0.0.1","admin","123456","mongo_monitor","3306") or die("数据库链接错误".mysql_error());
+      $con = mysqli_connect("127.0.0.1","admin","123456","mongo_slowsql","3306") or die("数据库链接错误".mysql_error());
 
 改成你的MongoDB Slowquery慢查询监控工具表结构（mongo_slowsql库）连接信息
 
