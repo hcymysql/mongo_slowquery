@@ -140,7 +140,7 @@ return true;
     $startCount=($page-1)*$perNumber; //分页开始,根据此方法计算出开始的记录 
 
     if(!empty($select_tag)){
-	$sql =  "SELECT a.checksum,a.querysql,a.ip,a.tag,a.dbname,a.port,a.ns,a.origin_user,a.client_ip,a.exec_time,a.last_time,a.count 
+	$sql =  "SELECT a.checksum,a.fingerprint,a.querysql,a.ip,a.tag,a.dbname,a.port,a.ns,a.origin_user,a.client_ip,a.exec_time,a.last_time,a.count 
 		        FROM mongo_slow_query_review a JOIN mongo_status_info b 
                 ON a.ip = b.ip AND a.dbname = b.dbname AND a.port = b.port
 				WHERE a.tag = '${select_tag}' AND a.querysql <> '[]' AND a.`querysql` <> 'null'
@@ -148,7 +148,7 @@ return true;
                 ORDER BY a.last_time DESC,a.count DESC
 				LIMIT $startCount,$perNumber";
     } else {
-        $sql = "SELECT a.checksum,a.querysql,a.ip,a.tag,a.dbname,a.port,a.ns,a.origin_user,a.client_ip,a.exec_time,a.last_time,a.count 
+        $sql = "SELECT a.checksum,a.fingerprint,a.querysql,a.ip,a.tag,a.dbname,a.port,a.ns,a.origin_user,a.client_ip,a.exec_time,a.last_time,a.count 
 		FROM mongo_slow_query_review a JOIN mongo_status_info b 
                 ON a.ip = b.ip AND a.dbname = b.dbname AND a.port = b.port
                 WHERE a.last_time >= SUBDATE(NOW(),INTERVAL 31 DAY)
@@ -166,13 +166,13 @@ return true;
     	echo "<tr>";
         echo "<td width='100px' onclick=\"TestBlack('${row['0']}')\">✚  &nbsp;" .substr("{$row['1']}",0,50)
     ."<div id='${row['0']}' style='display:none;'><a href='slowquery_explain.php?checksum={$row['0']}'>" .$row['1'] ."</br></div></a></td>";
-	echo "<td>{$row['2']}</td>";
 	echo "<td>{$row['3']}</td>";
-	echo "<td>{$row['5']}</td>";
+	echo "<td>{$row['4']}</td>";
 	echo "<td>{$row['6']}</td>";
-	echo "<td>{$row['10']}</td>";
-	echo "<td>{$row['9']}</td>";
+	echo "<td>{$row['7']}</td>";
 	echo "<td>{$row['11']}</td>";
+	echo "<td>{$row['10']}</td>";
+	echo "<td>{$row['12']}</td>";
 	echo "</tr>";
     }
 //end while

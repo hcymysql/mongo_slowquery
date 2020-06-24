@@ -3,6 +3,7 @@
 error_reporting(E_USER_WARNING | E_USER_NOTICE);
 ini_set('date.timezone','Asia/Shanghai');
 require 'conn.php';
+require 'checksum.php';
 
 $list = mysqli_query($con,"select ip,tag,user,pwd,port,dbname,threshold_slow_ms from mongo_status_info");
 
@@ -73,17 +74,18 @@ function init(){
 	$row = mysqli_fetch_assoc($result);
 		
 	//入库
-		$checksum = md5($querysql.$ns);
+	      $fingerprint = checksum($querysql);
+		$checksum = md5($fingerprint.$ns);
 		//echo '$row[\'checksum\']: '. $row['checksum'] . "\n";
 		//echo '$checksum: ' .$checksum  . "\n"; 
 		if ($row['checksum'] == $checksum){
 		    $insert_slowsql ="REPLACE INTO 	mongo_slow_query_review
-								  (checksum,querysql,ip,tag,dbname,port,ns,origin_user,client_ip,exec_time,last_time)
-								  VALUES('$checksum','$querysql','$ip','$tag','$dbname','$port','$ns','$origin_user','$client_ip','$exec_time','$last_time_cst')";	    
+								  (checksum,fingerprint,querysql,ip,tag,dbname,port,ns,origin_user,client_ip,exec_time,last_time)
+								  VALUES('$checksum','$fingerprint','$querysql','$ip','$tag','$dbname','$port','$ns','$origin_user','$client_ip','$exec_time','$last_time_cst')";	    
 		} else {
 		    $insert_slowsql ="INSERT INTO  mongo_slow_query_review
-								  (checksum,querysql,ip,tag,dbname,port,ns,origin_user,client_ip,exec_time,last_time)
-								  VALUES('$checksum','$querysql','$ip','$tag','$dbname','$port','$ns','$origin_user','$client_ip','$exec_time','$last_time_cst') ON DUPLICATE KEY UPDATE exec_time=$exec_time,last_time='$last_time_cst',count=count+1";			
+								  (checksum,fingerprint,querysql,ip,tag,dbname,port,ns,origin_user,client_ip,exec_time,last_time)
+								  VALUES('$checksum','$fingerprint','$querysql','$ip','$tag','$dbname','$port','$ns','$origin_user','$client_ip','$exec_time','$last_time_cst') ON DUPLICATE KEY UPDATE querysql='$querysql',exec_time=$exec_time,last_time='$last_time_cst',count=count+1";			
 		}
 	
 		//echo '$insert_slowsql: '. $insert_slowsql . "\n";
@@ -139,17 +141,18 @@ function incr(){
 	
 	if ($last_time > $d->sec) { //有新的慢SQL日志
 	//入库
-		$checksum = md5($querysql.$ns);
+	      $fingerprint = checksum($querysql);
+		$checksum = md5($fingerprint.$ns);
 		//echo '$row[\'checksum\']: '. $row['checksum'] . "\n";
 		//echo '$checksum: ' .$checksum  . "\n"; 
 		if ($row['checksum'] == $checksum){
 		    $insert_slowsql ="REPLACE INTO 	mongo_slow_query_review
-								  (checksum,querysql,ip,tag,dbname,port,ns,origin_user,client_ip,exec_time,last_time)
-								  VALUES('$checksum','$querysql','$ip','$tag','$dbname','$port','$ns','$origin_user','$client_ip','$exec_time','$last_time_cst')";	    
+								  (checksum,fingerprint,querysql,ip,tag,dbname,port,ns,origin_user,client_ip,exec_time,last_time)
+								  VALUES('$checksum','$fingerprint','$querysql','$ip','$tag','$dbname','$port','$ns','$origin_user','$client_ip','$exec_time','$last_time_cst')";	    
 		} else {
 		    $insert_slowsql ="INSERT INTO  mongo_slow_query_review
-								  (checksum,querysql,ip,tag,dbname,port,ns,origin_user,client_ip,exec_time,last_time)
-								  VALUES('$checksum','$querysql','$ip','$tag','$dbname','$port','$ns','$origin_user','$client_ip','$exec_time','$last_time_cst') ON DUPLICATE KEY UPDATE exec_time=$exec_time,last_time='$last_time_cst',count=count+1";			
+								  (checksum,fingerprint,querysql,ip,tag,dbname,port,ns,origin_user,client_ip,exec_time,last_time)
+								  VALUES('$checksum','$fingerprint','$querysql','$ip','$tag','$dbname','$port','$ns','$origin_user','$client_ip','$exec_time','$last_time_cst') ON DUPLICATE KEY UPDATE querysql='$querysql',exec_time=$exec_time,last_time='$last_time_cst',count=count+1";			
 		}
 	
 		//echo '$insert_slowsql: '. $insert_slowsql . "\n";
