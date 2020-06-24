@@ -97,7 +97,7 @@ threshold_slow_ms字段含义：输入慢查询的阈值，当查询时间超过
 
       $con = mysqli_connect("127.0.0.1","admin","123456","mongo_slowsql","3306") or die("数据库链接错误".mysql_error());
 
-改成你的MongoDB Slowquery慢查询监控工具表结构（mongo_slowsql库）连接信息
+改成你的MongoDB Slowquery慢查询监控工具表结构（mongo_slowsql库）连接信息（用户权限最好是管理员）
 
 4、Agent定时任务每10分钟抓取一次慢日志
 
