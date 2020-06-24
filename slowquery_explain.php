@@ -1,6 +1,7 @@
 <?php
 
 require 'conn.php';
+//require 'jsonFormat.php';
 
 $checksum=$_GET['checksum'];
 
@@ -44,7 +45,9 @@ $collection = $ns_collection[1];
     </div>
 
     <div class="card-header bg-light">
-        <font size="5" face="arial" color="blue">执行的SQL：</font><b><?php echo $querysql."<br>"; ?></b>
+        <font size="5" face="arial" color="blue">执行的SQL：</font><pre><b><?php require 'jsonFormat.php';
+echo jsonFormat(json_decode($querysql,true))."<br>"; ?></b></pre>
+
     </div>
 
 <?php
@@ -63,15 +66,16 @@ $collection = $ns_collection[1];
         <div class="card-header bg-light">
         <font size="5" face="arial" color="blue">	
 <?php
+$coll_info= $db->command(array('collStats' => $collection) );
 
-	$coll_info= $db->command(array('collStats' => $collection) );
-	echo '集合'.$collection.' 行数count统计是：'.$coll_info['count']."<br>";
-	echo '集合'.$collection.' 表大小Size统计是：'.round($coll_info['size']/(1024*1024*1024),2)."GB"."<br>";
-	echo '集合'.$collection.' 索引大小Index Size统计是：'.round($coll_info['totalIndexSize']/(1024*1024*1024),2)."GB"."<br>";
+echo '集合'.$collection.' 行数count统计是：'.$coll_info['count']."<br>";
+echo '集合'.$collection.' 表大小Size统计是：'.round($coll_info['size']/(1024*1024*1024),2)."GB"."<br>";
+echo '集合'.$collection.' 索引大小Index Size统计是：'.round($coll_info['totalIndexSize']/(1024*1024*1024),2)."GB"."<br>";
+?>
 
-	?>
         </font>
         </div>
+
 
 	<div class="card-header bg-light">
 	<font size="5" face="arial" color="blue">
