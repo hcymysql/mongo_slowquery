@@ -59,7 +59,10 @@ https://www.runoob.com/mongodb/mongodb-install-php-driver.html ）
     > use yourdb
     > db.createUser({user:"monitor_slowsql",pwd:"123456",roles:[{role:"dbOwner",db:"yourdb"}]})
     
- 
+创建用户成功后，可以用客户端测试一下登陆是否正常，命令如下：
+
+    mongo -u monitor_slowsql -p 123456 127.0.0.1:27017  --authenticationDatabase yourdb
+
 # 二、MongoDB Slowquery部署
 
 把https://github.com/hcymysql/mongo_slowquery/archive/master.zip安装包解压缩到 /var/www/html/目录下
