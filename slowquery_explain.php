@@ -45,11 +45,19 @@ $collection = $ns_collection[1];
     </div>
 
     <div class="card-header bg-light">
-        <font size="5" face="arial" color="blue">执行的SQL：</font><pre><b><?php require 'jsonFormat.php';
-echo jsonFormat(json_decode($querysql,true))."<br>"; ?></b></pre>
-
+        <font size="5" face="arial" color="blue">执行的SQL：</font>
     </div>
-
+	
+		<div class="card-body">
+		<div class="table-responsive">
+		<table class="table table-hover">
+		<pre><b><?php require 'jsonFormat.php';
+				echo jsonFormat(json_decode($querysql,true))."<br>"; ?>
+		</b></pre>
+		</table>
+		</div>
+		</div>
+		
 <?php
 
 	try{
