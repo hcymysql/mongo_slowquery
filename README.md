@@ -1,5 +1,7 @@
 # MongoDB Slowquery慢查询日志分析平台
 
+# 2020-08-26更新：增加对Secondary从库的慢查询日志采集，直接替换掉slowquery_explain.php和check_mongo_slowsql.php文件即可。
+
 # 简介
    MongoDB的慢SQL日志是记录到业务库的system.profile表里，当线上DB运行缓慢时，开发通常联系DBA去排查问题，那么可以将这种机械化的工作，做成一个平台化、可视化的工具出来，让开发在网页里点点鼠标即可查看数据库运行状况，这将大大提高工作效率，降低对DBA的依赖。
     
