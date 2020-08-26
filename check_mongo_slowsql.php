@@ -17,8 +17,10 @@ while( list($ip,$tag,$user,$pwd,$port,$dbname,$threshold_slow_ms) = mysqli_fetch
 	catch(Exception $e) {
 		echo '连接报错，错误信息是： ' .$e->getMessage()."\n";
 	}
-
-	$collection = $mongo_conn->selectCollection("$dbname","system.profile");
+	$db = $mongo_conn->$dbname;
+	$db->setSlaveOkay(true);
+	//$collection = $mongo_conn->selectCollection("$dbname","system.profile");
+	$collection = $db->selectCollection("system.profile");
 
 /*
 查询慢日志
@@ -28,7 +30,6 @@ db.getSiblingDB("samples").system.profile.find({millis:{$gte:1000}},{millis:1,ns
 	$fields=array("millis" => 1,"ns" => 1,"query" => 1,"ts" => 1, "client" => 1, "user" => 1);
 	$cursor = $collection->find($where,$fields)->limit(1000);
 	$cursor = $cursor->sort(array("ts" => -1));
-
 	$is_data = "SELECT a.id AS checksum FROM mongo_slow_query_review a JOIN mongo_status_info b 
 					ON a.ip = b.ip AND a.dbname = b.dbname AND a.port = b.port
 					WHERE a.ip = '$ip' and a.tag='$tag' and a.dbname='$dbname' and a.port='$port' order by a.id DESC LIMIT 1";
@@ -69,7 +70,7 @@ function init(){
 	$sql = "SELECT a.last_time AS last_time, a.checksum AS checksum FROM mongo_slow_query_review a JOIN mongo_status_info b 
     ON a.ip = b.ip AND a.dbname = b.dbname AND a.port = b.port
     WHERE a.dbname='$dbname' order by a.id DESC LIMIT 1";
-    
+
 	$result = mysqli_query($con,$sql);
 	$row = mysqli_fetch_assoc($result);
 		

@@ -58,11 +58,14 @@ $collection = $ns_collection[1];
 		</div>
 		</div>
 		
+
+
 <?php
 
 	try{
 		$mongo_conn = new MongoClient("mongodb://$user:$pwd@$ip:$port/$dbname" , array("connectTimeoutMS" => "3000"));
 		$db = $mongo_conn->$dbname;
+	      $db->setSlaveOkay(true);
 	}
           
 	catch(Exception $e) {
@@ -121,7 +124,7 @@ echo "<pre>";
 print_r($explain);
 echo "</pre>";
 
-//echo '<br><h3><a href="javascript:history.back(-1);">点击此处返回</a></h3></br>';
+echo '<br><h3><a href="javascript:history.back(-1);">点击此处返回</a></h3></br>';
 
 ?>
 
