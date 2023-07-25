@@ -22,7 +22,7 @@
     	public $exec_time;
     }
 
-    while($row = mysqli_fetch_array($result_echarts,MYSQL_ASSOC)){
+    while($row = mysqli_fetch_array($result_echarts,MYSQLI_ASSOC)){
     	$user=new User();
     	$user->last_time = $row['last_time'];
     	$user->exec_time = $row['exec_time'];
