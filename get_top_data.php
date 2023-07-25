@@ -19,7 +19,7 @@
     	public $top_count;
     }
 
-    while($row = mysqli_fetch_array($result_echarts,MYSQL_ASSOC)){
+    while($row = mysqli_fetch_array($result_echarts,MYSQLI_ASSOC)){
     	$user=new User();
     	$user->dbname = $row['dbname'];
     	$user->top_count = $row['top_count'];
