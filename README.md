@@ -1,5 +1,7 @@
 # MongoDB Slowquery慢查询日志分析平台
 
+2023-07-26更新：增加MongoDB 5.0慢日志抓取-check_mongo_slowsql_m5.php（用这个文件抓数据）
+
 2020-08-26更新：增加对Secondary从库的慢查询日志采集，直接替换掉slowquery_explain.php和check_mongo_slowsql.php文件即可。
 
 # 简介
